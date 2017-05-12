@@ -1,5 +1,10 @@
 pipeline {
-    agent { docker 'maven:3.3.3' }
+    agent {
+      docker {
+        image 'maven:3.3.3'
+        args '-v /var/lib/jenkins/conf/settings.xml:/root/.m2/settings.xml'
+      }
+    }
     stages {
         stage('cobertura') {
             steps {
