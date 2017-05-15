@@ -1,19 +1,24 @@
 pipeline {
-    agent {
-      docker {
-        image 'maven:3.3.3'
-        args '-v /var/lib/jenkins/conf/settings.xml:/root/.m2/settings.xml'
-      }
-    }
+    agent any
     stages {
-        stage('cobertura') {
+        /* "Build" and "Test" stages omitted */
+
+        stage('Deploy - Staging') {
             steps {
-                sh 'mvn clean cobertura:cobertura'
+                echo 'deploy staging'
+                echo 'run-smoke-tests'
             }
         }
-        stage('build') {
+
+        stage('Sanity check') {
             steps {
-                sh 'mvn clean package'
+                input "Does the staging environment look ok?"
+            }
+        }
+
+        stage('Deploy - Production') {
+            steps {
+                echo 'deploy production'
             }
         }
     }
